@@ -1,11 +1,16 @@
-import {makeStyles} from "@material-ui/core/styles";
-import React, { useState } from "react";
-import {AppBar, CssBaseline, Drawer, IconButton, Toolbar, Typography} from "@material-ui/core";
+import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
-import {Link} from "react-router-dom";
-import SidebarList from "../commonBoard/components/SidebarList";
-import clsx from "clsx";
+import IconButton from '@material-ui/core/IconButton';
+import SidebarList from "./SidebarList";
 
 const drawerWidth = 200;
 const useStyles = makeStyles(theme => ({
@@ -59,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
 }));
 
-export default function Main(props: { data: any; }) {
+const Main =(props: { data: any; })=> {
     const MainContents = props.data;
     const classes = useStyles();
     const [open, setOpen] = useState<boolean>(true);
@@ -77,7 +82,8 @@ export default function Main(props: { data: any; }) {
                 <Toolbar>
                     <IconButton
                         edge="start"
-                        className={classes.menuButton}
+                        // className={classes.menuButton}
+                        className={'menuButton'}
                         color="inherit"
                         aria-label="Open drawer"
                         onClick={open===true ? ()=>handleDrawerClose() : ()=>handleDrawerOpen()}
@@ -92,7 +98,7 @@ export default function Main(props: { data: any; }) {
                         className={classes.toolbarButtons}
                         color="inherit"
                         aria-label="Back to home"
-                        onClick={()=>(window.location="/")}>
+                        onClick={()=>(window.location.href='/')}>
                         <HomeIcon />
                     </IconButton>
                 </Toolbar>
@@ -123,3 +129,4 @@ export default function Main(props: { data: any; }) {
         </div>
     );
 }
+export default Main;
