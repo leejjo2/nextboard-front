@@ -31,6 +31,10 @@ class BoardStateKeeper {
         runInAction(() => this.boardRdo = Object.assign(new BoardRdo(boardRdo.boards)));
         return boardRdo;
     }
+
+    async saveBoard(board:Board) {
+        await this.boardSeekApi.saveBoard(board);
+    }
 }
 
 export default BoardStateKeeper;

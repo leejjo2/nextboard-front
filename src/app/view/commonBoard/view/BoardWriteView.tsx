@@ -2,6 +2,7 @@ import {observer} from "mobx-react";
 import {DraggableModal, ModalAction} from "../../shared/ui/modal";
 import {Button} from "@mui/material";
 import React, {MouseEvent} from "react";
+import ModalContainer from "../../shared/ui/modal/ModalContainer";
 
 interface Props {
     open: boolean,
@@ -13,7 +14,7 @@ const BoardWriteView = observer(((
         onClose,
     }:Props)=>{
     return (
-        <DraggableModal open={open} onClose={onClose} title={'boardList'} fluid width={'55vw'} resizable={true}>
+        <ModalContainer open={open} onClose={onClose} title={'boardList'} >
             <div className='gap'>
                 <ModalAction>
                     <Button variant='outlined' size='small' className='light' onClick={onClose}>
@@ -21,7 +22,7 @@ const BoardWriteView = observer(((
                     </Button>
                 </ModalAction>
             </div>
-        </DraggableModal>
+        </ModalContainer>
     )
     }
 ))

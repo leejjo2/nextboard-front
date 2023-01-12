@@ -6,7 +6,7 @@ interface Props{
 
 const ModalAction = ({children}:Props)=>{
     return (
-        <div className='modal-footer'>
+        <div className='modal-footer' style={{marginBottom:20}}>
             <div className='modal-btns right'>
                 {children}
             </div>

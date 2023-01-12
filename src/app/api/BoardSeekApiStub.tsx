@@ -19,6 +19,14 @@ class BoardSeekApiStub {
                   return res.data})
                 .catch(error => error);
     }
+
+    async saveBoard(board:Board){
+        await axios.post('/api/board/new', board)
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch(error=>error);
+    }
 }
 
 export default BoardSeekApiStub;

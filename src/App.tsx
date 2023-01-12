@@ -1,5 +1,6 @@
-import * as React from 'react'
-import './App.css'
+import * as React from 'react';
+import './App.css';
+import "~/assets/_modal.scss";
 import PageRoutes from '../src/pages/routes';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';

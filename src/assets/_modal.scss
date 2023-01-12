@@ -1,0 +1,35 @@
+
+.modal-wrap{
+  //@include flex($direction: column);
+  //position:relative;
+  z-index:1000;
+  outline:none;
+  max-width:95%;
+  min-width: 300px;
+  max-height:98%;
+  font-size: inherit;
+
+  &.full{
+    max-width: 100%;
+    max-height: 100%;
+    .modal-inner {
+      padding:0;
+    }
+  }
+
+  .modal-btns{
+    //@include flexCenter{
+    //  gap: 10px;
+    //}
+    display: flex;
+    margin: 15px 0 0;
+
+    &.right {
+      justify-content: flex-end;
+    }
+    &.border{
+      padding-top: 25px;
+      border-top: 1px solid var(--primary);
+    }
+  }
+}
