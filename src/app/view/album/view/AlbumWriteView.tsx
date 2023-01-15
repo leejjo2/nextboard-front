@@ -1,6 +1,6 @@
 import {observer, useLocalObservable} from "mobx-react";
 import {ModalAction} from "../../shared/ui/modal";
-import {Box, Button} from "@mui/material";
+import {Box, Button, StepIcon} from "@mui/material";
 import React, {MouseEvent, useState} from "react";
 import ModalContainer from "../../shared/ui/modal/ModalContainer";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,6 +14,10 @@ import TextField from "@mui/material/TextField";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import BoardStateKeeper from "../../../state/BoardStateKeeper";
 import Board from "../../../api/entity/Board";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import MenuIcon from "@material-ui/icons/Menu";
+import {FileDownload} from "@mui/icons-material";
 
 interface BoardValues {
     boardNo: string,
@@ -27,44 +31,28 @@ const theme = createTheme();
 interface Props {
     open: boolean,
     onClose: ((e: MouseEvent<HTMLElement>) => void) & ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
-    setViewWriteModal: (a: boolean) => void,
+    onChangeBoardInput:(e:any)=>void,
+    handleOnChangeFile:any,
+    handleClickSave: any
 }
 
 const AlbumWriteView = observer(((
         {
             open,
             onClose,
-            setViewWriteModal,
+            onChangeBoardInput,
+            handleOnChangeFile,
+            handleClickSave,
         }: Props) => {
 
-        const boardStateKeeper = useLocalObservable(() => BoardStateKeeper.instance);
-        const {boardRdo} = boardStateKeeper;
-
-        const [boardValues, setBoardValues] = useState<BoardValues>({
-            boardNo: '', writerId: '', content: '', title: ''
-        })
-
-        const onChangeBoardInput = (e: any) => {
-            const {name, value} = e.target;
-            setBoardValues({
-                ...boardValues,
-                [name]: value,
-            });
-        };
-
-        const handleClickSave = (boardValues: BoardValues) => {
-            const board = Board.new();
-            board.boardNo = boardValues.boardNo;
-            board.writerId = boardValues.writerId;
-            board.title = boardValues.title;
-            board.content = boardValues.content;
-            boardStateKeeper.saveBoard(board);
-        };
-
         const onClickSave = () => {
-            handleClickSave(boardValues);
-            setViewWriteModal(false);
+            handleClickSave();
         }
+
+        // const onChangeFile = (e) => {
+        //     console.log(e.target.files[0]);
+        //     handleOnChangeFile(e.target.files[0])
+        // }
 
         return (
             <ModalContainer open={open} onClose={onClose} title={'boardList'}>
@@ -150,13 +138,27 @@ const AlbumWriteView = observer(((
                                                     variant="standard"
                                                 />
                                             </Grid>
+                                            <Grid item xs={12}>
+                                                <input
+                                                    color="primary"
+                                                    accept="image/*"
+                                                    type="file"
+                                                    // onChange={onChangeFile}
+                                                    id="icon-button-file"
+                                                    style={{ display: 'none', }}
+                                                />
+                                                <label htmlFor="icon-button-file">
+                                                    <Button
+                                                        variant="contained"
+                                                        component="span"
+                                                        size="large"
+                                                        color="primary"
+                                                    >
+                                                        <FileDownload></FileDownload>
+                                                    </Button>
+                                                </label>
+                                            </Grid>
 
-                                            {/*<Grid item xs={12}>*/}
-                                            {/*    <FormControlLabel*/}
-                                            {/*        control={<Checkbox color="secondary" name="saveAddress" value="yes"/>}*/}
-                                            {/*        label="Use this address for payment details"*/}
-                                            {/*    />*/}
-                                            {/*</Grid>*/}
                                         </Grid>
                                     </React.Fragment>
                                     <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>

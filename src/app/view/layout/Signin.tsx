@@ -16,72 +16,22 @@ import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 
-function MadeWithLove() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Built with love by the '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Material-UI
-      </Link>
-      {' team.'}
-    </Typography>
-  );
-}
 
-const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  toolbarButtons: {
-    marginLeft: "auto",
-    marginRight: -12
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+
 
 const SignIn = () => {
-  const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="xs">        
+    <Container component="main" maxWidth="xs" style={{marginTop:150}}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-      >        
-          <IconButton 
-          className={classes.toolbarButtons} 
-          color="inherit" 
-          aria-label="Back to home" 
-          onClick={()=>(window.location.href="/")}>
-          <HomeIcon />
-          </IconButton>
-      </AppBar>
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+      <div >
+        <Avatar >
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form  noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -113,7 +63,6 @@ const SignIn = () => {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
             Sign In
           </Button>
@@ -131,9 +80,6 @@ const SignIn = () => {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <MadeWithLove />
-      </Box>
     </Container>
   );
 }
