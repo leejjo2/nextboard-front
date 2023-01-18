@@ -12,8 +12,8 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import BoardStateKeeper from "../../../state/BoardStateKeeper";
-import Board from "../../../api/entity/Board";
+import BoardStateKeeper from "../../../state/board/BoardStateKeeper";
+import Board from "../../../api/entity/board/Board";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -31,8 +31,8 @@ const theme = createTheme();
 interface Props {
     open: boolean,
     onClose: ((e: MouseEvent<HTMLElement>) => void) & ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
-    onChangeBoardInput:(e:any)=>void,
-    handleOnChangeFile:any,
+    onChangeBoardInput: (e: any) => void,
+    handleOnChangeFile: any,
     handleClickSave: any
 }
 
@@ -49,10 +49,13 @@ const AlbumWriteView = observer(((
             handleClickSave();
         }
 
-        // const onChangeFile = (e) => {
-        //     console.log(e.target.files[0]);
-        //     handleOnChangeFile(e.target.files[0])
-        // }
+        const onChangeFile = (e:React.ChangeEvent<HTMLInputElement>) => {
+            if (!e) {
+                return;
+            } else {
+                handleOnChangeFile(e)
+            }
+        }
 
         return (
             <ModalContainer open={open} onClose={onClose} title={'boardList'}>
@@ -81,40 +84,16 @@ const AlbumWriteView = observer(((
                         </AppBar>
                         <Container component="main" maxWidth="sm" sx={{mb: 4}}>
                             <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
-                                <Typography component="h1" variant="h4" align="center">
+                                <Typography component="h1" variant="h4" align="center" sx={{mb: 4}}>
                                     게시물 작성
                                 </Typography>
 
                                 <React.Fragment>
                                     <React.Fragment>
-                                        <Typography variant="h6" gutterBottom>
-                                            글을 작성해 주세요.
-                                        </Typography>
+                                        {/*<Typography variant="h6" gutterBottom>*/}
+                                        {/*    글을 작성해 주세요.*/}
+                                        {/*</Typography>*/}
                                         <Grid container spacing={3}>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    required
-                                                    id="boardNo"
-                                                    name="boardNo"
-                                                    label="Board No"
-                                                    onChange={onChangeBoardInput}
-                                                    fullWidth
-                                                    autoComplete="given-name"
-                                                    variant="standard"
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                    required
-                                                    id="writerId"
-                                                    name="writerId"
-                                                    label="Writer Id"
-                                                    onChange={onChangeBoardInput}
-                                                    fullWidth
-                                                    autoComplete="family-name"
-                                                    variant="standard"
-                                                />
-                                            </Grid>
                                             <Grid item xs={12}>
                                                 <TextField
                                                     required
@@ -132,6 +111,8 @@ const AlbumWriteView = observer(((
                                                     id="content"
                                                     name="content"
                                                     label="Content"
+                                                    rows={5}
+                                                    multiline
                                                     onChange={onChangeBoardInput}
                                                     fullWidth
                                                     autoComplete="shipping address-line2"
@@ -143,9 +124,9 @@ const AlbumWriteView = observer(((
                                                     color="primary"
                                                     accept="image/*"
                                                     type="file"
-                                                    // onChange={onChangeFile}
+                                                    onChange={onChangeFile}
                                                     id="icon-button-file"
-                                                    style={{ display: 'none', }}
+                                                    style={{display: 'none',}}
                                                 />
                                                 <label htmlFor="icon-button-file">
                                                     <Button
@@ -154,7 +135,8 @@ const AlbumWriteView = observer(((
                                                         size="large"
                                                         color="primary"
                                                     >
-                                                        <FileDownload></FileDownload>
+                                                        {/*<FileDownload></FileDownload>*/}
+                                                        사진 업로드
                                                     </Button>
                                                 </label>
                                             </Grid>
@@ -177,7 +159,7 @@ const AlbumWriteView = observer(((
                     </ThemeProvider>
                 </div>
             </ModalContainer>
-        )
+        );
     }
 ))
 export default AlbumWriteView;

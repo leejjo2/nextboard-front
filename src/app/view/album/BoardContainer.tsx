@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -9,30 +9,37 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {observer, useLocalObservable} from "mobx-react";
-import BoardStateKeeper from "../../state/BoardStateKeeper";
+import BoardStateKeeper from "../../state/board/BoardStateKeeper";
 import {GridApi} from "ag-grid-community";
 import AlbumWriteView from "./view/AlbumWriteView";
-import Board from '../../api/entity/Board';
+import Board from '../../api/entity/board/Board';
+import AppContext from "../../../pages/AppContext";
+import {useNavigate} from "react-router-dom";
 
 interface BoardValues {
     boardNo: string,
     writerId: string,
     title: string,
     content: string,
-    photo: string,
 }
 
 interface Props {
     // userId: string,
 }
 
-const AlbumContainer = observer(({
+const BoardContainer = observer(({
                                      // userId: string,
                                  }: Props) => {
 
+
+        const appCtx = useContext(AppContext);
+        const navigate = useNavigate();
+        const memberObj = appCtx.memberObj;
         const boardStateKeeper = useLocalObservable(() => BoardStateKeeper.instance);
         const {boardRdo} = boardStateKeeper;
-        const [gridApi, setGridApi] = useState<GridApi | null>(null);
+        const [file, setFile] = useState<File | undefined>(undefined);
+
+        const token = appCtx.token;
 
         const findBoardList = async () => {
             await boardStateKeeper.findBoardList();
@@ -43,7 +50,9 @@ const AlbumContainer = observer(({
         }, []);
 
         const init = () => {
-            findBoardList();
+                appCtx.getUser();
+                appCtx.setMenuIdx(2);
+                findBoardList();
         };
 
         const [viewWriteModal, setViewWriteModal] = useState<boolean>(false);
@@ -56,7 +65,7 @@ const AlbumContainer = observer(({
         }
 
         const [boardValues, setBoardValues] = useState<BoardValues>({
-            boardNo: '', writerId: '', content: '', title: '', photo: '',
+            boardNo: '', writerId: '', content: '', title: ''
         })
 
         const onChangeBoardInput = (e: any) => {
@@ -67,20 +76,27 @@ const AlbumContainer = observer(({
             });
         };
 
-        const handleOnChangeFile = () => {
-
+        const handleOnChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+            setFile(e.target.files![0])
+            e.target.value = '';
         }
         const handleClickSave = () => {
             const board = Board.new();
-            board.boardNo = boardValues.boardNo;
-            board.writerId = boardValues.writerId;
             board.title = boardValues.title;
             board.content = boardValues.content;
-            boardStateKeeper.saveBoard(board).then(() => {
+            boardStateKeeper.saveBoard(board, file, token).then(() => {
                 findBoardList();
                 setViewWriteModal(false);
+                setFile(undefined);
             });
         };
+
+        const onClickDeleteBoard = (boardId: string) => {
+            boardStateKeeper.deleteBoard(boardId, token).then(() => {
+                    findBoardList();
+                }
+            );
+        }
 
 
         return (
@@ -88,42 +104,43 @@ const AlbumContainer = observer(({
                 <CssBaseline/>
                 <main>
                     {/* Hero unit */}
-                    <div >
+                    <div>
                         <Container maxWidth="sm">
-                            <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                                앨범
-                            </Typography>
+                            {/*<Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>*/}
+                            {/*    앨범*/}
+                            {/*</Typography>*/}
                             <Typography variant="h5" align="center" color="textSecondary" paragraph>
                                 앨범 게시판 입니다.
                             </Typography>
-                            <div >
+                            <div>
                                 <Grid container spacing={2} justify="center">
                                     <Grid item>
                                         <Button variant="contained" color="primary" onClick={onClickWriteBoard}>
                                             업로드 하기
                                         </Button>
                                     </Grid>
-                                    <Grid item>
-                                        <Button variant="outlined" color="primary">
-                                            Secondary action
-                                        </Button>
-                                    </Grid>
+                                    {/*<Grid item>*/}
+                                    {/*    <Button variant="outlined" color="primary">*/}
+                                    {/*        Secondary action*/}
+                                    {/*    </Button>*/}
+                                    {/*</Grid>*/}
                                 </Grid>
                             </div>
                         </Container>
                     </div>
-                    <Container  maxWidth="md">
+                    <Container maxWidth="md">
                         {/* End hero unit */}
                         <Grid container spacing={4}>
                             {boardRdo?.boards.map(board => (
                                 <Grid item key={board.id} xs={12} sm={6} md={4}>
-                                    <Card >
+                                    <Card>
                                         <CardMedia
-
-                                            image="https://source.unsplash.com/random"
+                                            component="img"
+                                            src={'/api/board/show-img/' + board.saveFileName}
                                             title="Image title"
+                                            style={{height: 140}}
                                         />
-                                        <CardContent >
+                                        <CardContent>
                                             <Typography gutterBottom variant="h5" component="h2">
                                                 {board.title}
                                             </Typography>
@@ -131,7 +148,7 @@ const AlbumContainer = observer(({
                                                 {board.content}
                                             </Typography>
                                             <Typography variant="body2" color="textSecondary">
-                                                작성자 | {board.writerId}
+                                                작성자 | {board.writerName}
                                                 <br/>
                                                 작성시간 | {board.registerTime}
                                             </Typography>
@@ -143,6 +160,15 @@ const AlbumContainer = observer(({
                                             <Button size="small" color="primary">
                                                 Edit
                                             </Button>
+                                            {
+                                                board.writerId === memberObj.memberId
+                                                &&
+                                                <Button size="small" color="primary"
+                                                        onClick={() => onClickDeleteBoard(board.id)}>
+                                                    Delete
+                                                </Button>
+                                            }
+
                                         </CardActions>
                                     </Card>
                                 </Grid>
@@ -151,7 +177,7 @@ const AlbumContainer = observer(({
                     </Container>
                 </main>
                 {/* Footer */}
-                <footer >
+                <footer>
                     <Typography variant="h6" align="center" gutterBottom>
                         Footer
                     </Typography>
@@ -163,10 +189,11 @@ const AlbumContainer = observer(({
                 {
                     viewWriteModal &&
                     <AlbumWriteView open={viewWriteModal} onClose={onCloseWriteBoard}
-                                    onChangeBoardInput={onChangeBoardInput} handleOnChangeFile={handleOnChangeFile} handleClickSave={handleClickSave}/>
+                                    onChangeBoardInput={onChangeBoardInput} handleOnChangeFile={handleOnChangeFile}
+                                    handleClickSave={handleClickSave}/>
                 }
             </React.Fragment>
         );
     }
 );
-export default AlbumContainer;
+export default BoardContainer;
