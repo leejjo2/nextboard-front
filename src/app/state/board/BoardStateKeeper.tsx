@@ -32,8 +32,16 @@ class BoardStateKeeper {
         return boardRdo;
     }
 
+    async findBoard(boardId:string, token:any):Promise<Board>{
+        return await this.boardApi.findBoard(boardId, token);
+    }
+
     async saveBoard(board:Board, file:File|undefined, token: any) {
         await this.boardApi.saveBoard(board, file, token);
+    }
+
+    async editBoard(board:Board, file:File|undefined, token: any){
+        await this.boardApi.editBoard(board, file, token);
     }
 
     async deleteBoard(boardId:string, token:any){

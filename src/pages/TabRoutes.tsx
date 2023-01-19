@@ -4,7 +4,7 @@ import {Link, Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import {Button} from "@mui/material";
 import Home from "../app/view/layout/Home";
-import BoardContainer from "../app/view/album/BoardContainer";
+import BoardContainer from "../app/view/board/BoardContainer";
 import LogInContainer from "../app/view/member/LogInContainer";
 import SignUpContainer from "../app/view/member/SignUpContainer";
 import AppContext from "./AppContext";

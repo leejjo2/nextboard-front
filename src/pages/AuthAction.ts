@@ -70,7 +70,7 @@ export const getUserActionHandler = (token:string) => {
 }
 
 export const changeNicknameActionHandler = ( nickname:string, token: string) => {
-    const URL = '/member/nickname';
+    const URL = '/api/member/nickname';
     const changeNicknameObj = { nickname };
     const response = POST(URL, changeNicknameObj, createTokenHeader(token));
 
@@ -82,7 +82,7 @@ export const changePasswordActionHandler = (
     newPassword: string,
     token: string
 ) => {
-    const URL = '/member/password';
+    const URL = '/api/member/password';
     const changePasswordObj = { exPassword, newPassword }
     const response = POST(URL, changePasswordObj, createTokenHeader(token));
     return response;

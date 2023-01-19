@@ -3,7 +3,8 @@ import axios, {AxiosResponse, toFormData} from "axios";
 import BoardRdo from "./sdo/BoardRdo";
 import {useContext} from "react";
 import AppContext from "../../../../pages/AppContext";
-const createTokenHeader = (token:string) => {
+
+const createTokenHeader = (token:any) => {
     return {
         headers: {
             'Authorization': 'Bearer ' + token
@@ -30,6 +31,13 @@ class BoardApiStub {
                 .catch(error => error);
     }
 
+    async findBoard(boardId:string, token:any) : Promise<Board>{
+        return await axios.post('/api/board/find-board', {'id':boardId}, createTokenHeader(token))
+            .then((res) =>{
+                return res.data})
+            .catch(error => error);
+    }
+
     async saveBoard(board:Board, file:File|undefined, token:any){
         const formData = new FormData();
         formData.append("board", new Blob([JSON.stringify(board)],{type:"application/json"}));
@@ -37,6 +45,18 @@ class BoardApiStub {
             formData.append("file", file);
         }
         await axios.post('/api/board/save-board', formData, createTokenHeader(token))
+            .then((res)=>{
+                console.log(res);
+            })
+            .catch(error=>error);
+    }
+    async editBoard(board:Board, file:File|undefined, token:any){
+        const formData = new FormData();
+        formData.append("board", new Blob([JSON.stringify(board)],{type:"application/json"}));
+        if(file){
+            formData.append("file", file);
+        }
+        await axios.post('/api/board/edit-board', formData, createTokenHeader(token))
             .then((res)=>{
                 console.log(res);
             })

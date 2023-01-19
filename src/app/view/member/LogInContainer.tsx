@@ -99,6 +99,7 @@ const LogInContainer = () => {
           />
           <Button
             fullWidth
+            type={"submit"}
             variant="contained"
             color="primary"
             onClick={handleClickSignIn}

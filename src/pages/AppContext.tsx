@@ -22,7 +22,7 @@ const AppContext = React.createContext({
     signup: (memberId: string, memberPassword: string, memberName:string) =>  {},
     login: (memberId:string, memberPassword: string) => {},
     logout: () => {},
-    getUser: () => {},
+    getMember: () => {},
     changeNickname: (nickname:string) => {},
     changePassword: (exPassword: string, newPassword: string) => {}
 });
@@ -88,7 +88,7 @@ export const AuthContextProvider:React.FC<Props> = (props) => {
         }
     }, []);
 
-    const getUserHandler = () => {
+    const getMemberHandler = () => {
         setIsGetSuccess(false);
         const data = authAction.getUserActionHandler(token);
         data.then((result) => {
@@ -145,7 +145,7 @@ export const AuthContextProvider:React.FC<Props> = (props) => {
         signup: signupHandler,
         login: loginHandler,
         logout: logoutHandler,
-        getUser: getUserHandler,
+        getMember: getMemberHandler,
         changeNickname: changeNicknameHandler,
         changePassword: changePaswordHandler
     }

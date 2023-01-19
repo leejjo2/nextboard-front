@@ -18,43 +18,52 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import MenuIcon from "@material-ui/icons/Menu";
 import {FileDownload} from "@mui/icons-material";
+import {BoardValues} from "../BoardContainer";
 
-interface BoardValues {
-    boardNo: string,
-    writerId: string,
-    title: string,
-    content: string,
-}
 
 const theme = createTheme();
 
 interface Props {
     open: boolean,
     onClose: ((e: MouseEvent<HTMLElement>) => void) & ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
-    onChangeBoardInput: (e: any) => void,
-    handleOnChangeFile: any,
-    handleClickSave: any
+    editTargetBoard:Board|undefined;
+    handleClickEditComplete: (boardId:string, boardValues:BoardValues, file:File|undefined)=>void;
 }
 
-const AlbumWriteView = observer(((
+const BoardEditModalView = observer(((
         {
             open,
             onClose,
-            onChangeBoardInput,
-            handleOnChangeFile,
-            handleClickSave,
+            editTargetBoard,
+            handleClickEditComplete,
         }: Props) => {
 
-        const onClickSave = () => {
-            handleClickSave();
-        }
 
+        const [boardValues, setBoardValues] = useState<BoardValues>({
+            content: '', title: ''
+        })
+
+        const onChangeBoardInput = (e: any) => {
+            const {name, value} = e.target;
+            setBoardValues({
+                ...boardValues,
+                [name]: value,
+            });
+        };
+
+        const [file, setFile] = useState<File | undefined>(undefined);
         const onChangeFile = (e:React.ChangeEvent<HTMLInputElement>) => {
             if (!e) {
                 return;
             } else {
-                handleOnChangeFile(e)
+                setFile(e.target.files![0])
+                e.target.value = '';
             }
+        }
+
+        const onClickSave = () => {
+            handleClickEditComplete(editTargetBoard!.id, boardValues, file);
+            setFile(undefined);
         }
 
         return (
@@ -78,16 +87,17 @@ const AlbumWriteView = observer(((
                         >
                             <Toolbar>
                                 <Typography variant="h6" color="inherit" noWrap>
-                                    앨범 게시판
+                                    수정
                                 </Typography>
                             </Toolbar>
                         </AppBar>
                         <Container component="main" maxWidth="sm" sx={{mb: 4}}>
                             <Paper variant="outlined" sx={{my: {xs: 3, md: 6}, p: {xs: 2, md: 3}}}>
                                 <Typography component="h1" variant="h4" align="center" sx={{mb: 4}}>
-                                    게시물 작성
+                                    게시물 수정
                                 </Typography>
-
+                                {
+                                    editTargetBoard&&
                                 <React.Fragment>
                                     <React.Fragment>
                                         {/*<Typography variant="h6" gutterBottom>*/}
@@ -100,6 +110,7 @@ const AlbumWriteView = observer(((
                                                     id="title"
                                                     name="title"
                                                     label="Title"
+                                                    defaultValue={editTargetBoard.title}
                                                     onChange={onChangeBoardInput}
                                                     fullWidth
                                                     autoComplete="shipping address-line1"
@@ -113,6 +124,7 @@ const AlbumWriteView = observer(((
                                                     label="Content"
                                                     rows={5}
                                                     multiline
+                                                    defaultValue={editTargetBoard.content}
                                                     onChange={onChangeBoardInput}
                                                     fullWidth
                                                     autoComplete="shipping address-line2"
@@ -150,10 +162,11 @@ const AlbumWriteView = observer(((
                                             onClick={onClickSave}
                                             sx={{mt: 3, ml: 1}}
                                         >
-                                            {'저장'}
+                                            {'수정완료'}
                                         </Button>
                                     </Box>
                                 </React.Fragment>
+                                }
                             </Paper>
                         </Container>
                     </ThemeProvider>
@@ -162,4 +175,4 @@ const AlbumWriteView = observer(((
         );
     }
 ))
-export default AlbumWriteView;
+export default BoardEditModalView;
