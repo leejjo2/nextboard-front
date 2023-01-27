@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useContext, useState} from "react";
+import React, {PropsWithChildren, useContext, useEffect, useState} from "react";
 import {AppBar, Tabs, Tab} from "@material-ui/core";
 import {Link, Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
@@ -15,6 +15,15 @@ const TabRoutes = () => {
 
     const appCtx = useContext(AppContext);
     const menuIdx = appCtx.menuIdx;
+    const memberObj = appCtx.memberObj;
+
+    useEffect(()=>{
+        init();
+    },[appCtx.isLoggedIn]);
+
+    const init = () =>{
+        appCtx.getMember();
+    }
 
     const [value, setValue] = useState(0);
 
@@ -44,7 +53,7 @@ const TabRoutes = () => {
                 top: 0,
                 marginBottom: 40
             }}>
-                <Button onClick={handleClickLogin}><HomeIcon/> {!appCtx.isLoggedIn && '\u00a0 Log In'}</Button>
+                <Button onClick={handleClickLogin}><HomeIcon/> {!appCtx.isLoggedIn && '\u00a0 Log In'}{appCtx.isLoggedIn && '\u00a0'+ memberObj.memberName}</Button>
                 {appCtx.isLoggedIn && <Button onClick={handleClickLogout}>Log out</Button>}
                 <Tabs
                     value={menuIdx === 0 ? false : menuIdx}
