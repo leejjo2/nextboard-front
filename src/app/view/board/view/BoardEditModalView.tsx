@@ -1,7 +1,7 @@
 import {observer, useLocalObservable} from "mobx-react";
 import {ModalAction} from "../../shared/ui/modal";
 import {Box, Button, StepIcon} from "@mui/material";
-import React, {MouseEvent, useState} from "react";
+import React, {MouseEvent, useEffect, useState} from "react";
 import ModalContainer from "../../shared/ui/modal/ModalContainer";
 import CssBaseline from "@mui/material/CssBaseline";
 import AppBar from "@mui/material/AppBar";
@@ -51,12 +51,27 @@ const BoardEditModalView = observer(((
             });
         };
 
+        useEffect(()=>{
+            setBoardValues({
+                content:editTargetBoard?.content!,
+                title:editTargetBoard?.title!
+            })
+
+        },[editTargetBoard])
+
         const [file, setFile] = useState<File | undefined>(undefined);
+        const [previewImg, setPreviewImg] = useState<string|ArrayBuffer|null>("");
+
         const onChangeFile = (e:React.ChangeEvent<HTMLInputElement>) => {
             if (!e) {
                 return;
             } else {
                 setFile(e.target.files![0])
+                const reader = new FileReader();
+                reader.readAsDataURL(e.target.files![0]);
+                reader.onloadend = () =>{
+                    setPreviewImg(reader.result);
+                }
                 e.target.value = '';
             }
         }
@@ -131,7 +146,7 @@ const BoardEditModalView = observer(((
                                                     variant="standard"
                                                 />
                                             </Grid>
-                                            <Grid item xs={12}>
+                                            <Grid item xs={6}>
                                                 <input
                                                     color="primary"
                                                     accept="image/*"
@@ -148,9 +163,15 @@ const BoardEditModalView = observer(((
                                                         color="primary"
                                                     >
                                                         {/*<FileDownload></FileDownload>*/}
-                                                        사진 업로드
+                                                        사진 수정
                                                     </Button>
                                                 </label>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <img
+                                                    style={{width:200, height:200}}
+                                                    src={previewImg? previewImg.toString():'/api/board/show-img/' + editTargetBoard.saveFileName}
+                                                />
                                             </Grid>
 
                                         </Grid>

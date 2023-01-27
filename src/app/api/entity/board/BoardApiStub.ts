@@ -40,10 +40,10 @@ class BoardApiStub {
 
     async saveBoard(board:Board, file:File|undefined, token:any){
         const formData = new FormData();
-        formData.append("board", new Blob([JSON.stringify(board)],{type:"application/json"}));
         if(file){
             formData.append("file", file);
         }
+        formData.append("board", new Blob([JSON.stringify(board)],{type:"application/json"}));
         await axios.post('/api/board/save-board', formData, createTokenHeader(token))
             .then((res)=>{
                 console.log(res);

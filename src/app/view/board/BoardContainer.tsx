@@ -83,6 +83,7 @@ const BoardContainer = observer(({
             boardStateKeeper.findBoard(boardId, token).then((res) => {
                 setEditTargetBoard(res);
             })
+            setViewSelectedBoardModal(false)
             setViewEditModal(true);
         }
 
@@ -188,20 +189,20 @@ const BoardContainer = observer(({
                                                 {/*</Typography>*/}
                                             </CardContent>
                                         </CardActionArea>
-                                        {
-                                            board.writerId === memberObj.memberId
-                                            &&
-                                            <CardActions>
-                                                <Button size="small" color="primary"
-                                                        onClick={() => onClickEditBoard(board.id)}>
-                                                    Edit
-                                                </Button>
-                                                <Button size="small" color="primary"
-                                                        onClick={() => onClickDeleteBoard(board.id)}>
-                                                    Delete
-                                                </Button>
-                                            </CardActions>
-                                        }
+                                        {/*{*/}
+                                        {/*    board.writerId === memberObj.memberId*/}
+                                        {/*    &&*/}
+                                        {/*    <CardActions>*/}
+                                        {/*        <Button size="small" color="primary"*/}
+                                        {/*                onClick={() => onClickEditBoard(board.id)}>*/}
+                                        {/*            Edit*/}
+                                        {/*        </Button>*/}
+                                        {/*        <Button size="small" color="primary"*/}
+                                        {/*                onClick={() => onClickDeleteBoard(board.id)}>*/}
+                                        {/*            Delete*/}
+                                        {/*        </Button>*/}
+                                        {/*    </CardActions>*/}
+                                        {/*}*/}
 
 
                                     </Card>
@@ -234,7 +235,7 @@ const BoardContainer = observer(({
                 {
                     viewSelectedBoardModal &&
                     <SelectedBoardModalView open={viewSelectedBoardModal} onClose={onCloseSelectedBoard}
-                                            selectedBoard={selectedBoard} onClickDeleteBoard={onClickDeleteBoard}/>
+                                            selectedBoard={selectedBoard}onClickEditBoard={onClickEditBoard} onClickDeleteBoard={onClickDeleteBoard}/>
                 }
             </React.Fragment>
         );

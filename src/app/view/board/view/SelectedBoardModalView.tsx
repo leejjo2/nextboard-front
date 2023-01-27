@@ -32,6 +32,7 @@ interface Props {
     open: boolean,
     onClose: ((e: MouseEvent<HTMLElement>) => void) & ((event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void)
     selectedBoard: Board | undefined,
+    onClickEditBoard:(boardId: string)=>void,
     onClickDeleteBoard: (boardId: string) => void,
 }
 
@@ -40,6 +41,7 @@ const SelectedBoardModalView = observer(((
             open,
             onClose,
             selectedBoard,
+            onClickEditBoard,
             onClickDeleteBoard,
         }: Props) => {
 
@@ -88,7 +90,7 @@ const SelectedBoardModalView = observer(((
                                             selectedBoard.writerId === memberObj.memberId
                                             &&
                                             <>
-                                                <Button size="small" color="primary">
+                                                <Button size="small" color="primary" onClick={()=> onClickEditBoard(selectedBoard.id)}>
                                                     Edit
                                                 </Button>
                                                 <Button size="small" color="primary"

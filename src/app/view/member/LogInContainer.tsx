@@ -46,7 +46,8 @@ const LogInContainer = () => {
     });
   };
 
-  const handleClickSignIn = async () => {
+  const handleClickSignIn = async (event:React.FormEvent) => {
+    event.preventDefault();
     if (memberValues.memberPassword === "" || memberValues.memberId === "") {
       alert("input values");
 
@@ -70,7 +71,7 @@ const LogInContainer = () => {
         <Typography component="h1" variant="h5" style={{textAlign:"center"}}>
           Log in
         </Typography>
-        <form  noValidate>
+        <form  noValidate onSubmit={handleClickSignIn}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -102,7 +103,7 @@ const LogInContainer = () => {
             type={"submit"}
             variant="contained"
             color="primary"
-            onClick={handleClickSignIn}
+            // onClick={handleClickSignIn}
           >
             Sign In
             {isLoading && <p>Loading</p>}

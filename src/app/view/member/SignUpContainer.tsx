@@ -51,7 +51,8 @@ const SignUpContainer = observer(({
                 [name]: value,
             });
         };
-        const handleClickSave = async () => {
+        const handleClickSave = async (event:React.FormEvent) => {
+            event.preventDefault();
             if (memberValues.memberPassword === "" || memberValues.memberId === "" || memberValues.memberName === "") {
                 alert("input values");
 
@@ -68,7 +69,7 @@ const SignUpContainer = observer(({
                     <Typography component="h1" variant="h5" style={{textAlign: "center"}}>
                         Sign up
                     </Typography>
-                    <form noValidate>
+                    <form noValidate onSubmit={handleClickSave}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -109,10 +110,11 @@ const SignUpContainer = observer(({
                             onChange={onChangeBoardInput}
                         />
                         <Button
+                            type={"submit"}
                             fullWidth
                             variant="contained"
                             color="primary"
-                            onClick={handleClickSave}
+                            // onClick={handleClickSave}
                         >
                             Sign Up
                         </Button>

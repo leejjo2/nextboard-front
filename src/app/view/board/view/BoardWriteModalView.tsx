@@ -67,8 +67,12 @@ const BoardWriteModalView = observer(((
         }
 
         const onClickSave = () => {
+            if(file){
             handleClickSave(boardValues, file);
             setFile(undefined);
+            }else{
+                alert('이미지를 추가해 주세요.')
+            }
         }
 
         return (
