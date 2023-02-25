@@ -12,14 +12,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import BoardStateKeeper from "../../../state/board/BoardStateKeeper";
-import Board from "../../../api/entity/board/Board";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import MenuIcon from "@material-ui/icons/Menu";
-import {FileDownload} from "@mui/icons-material";
 import {BoardValues} from "../BoardContainer";
-import {auto} from "@popperjs/core";
 
 
 const theme = createTheme();
@@ -30,7 +23,7 @@ interface Props {
     handleClickSave: any
 }
 
-const BoardWriteModalView = observer(((
+const BoardWriteModalView = (
         {
             open,
             onClose,
@@ -184,6 +177,5 @@ const BoardWriteModalView = observer(((
                 </div>
             </ModalContainer>
         );
-    }
-))
+    };
 export default BoardWriteModalView;

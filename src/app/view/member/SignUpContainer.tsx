@@ -4,10 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Board from "../../api/entity/board/Board";
-import User from "../../api/entity/member/Member";
 import {observer, useLocalObservable} from "mobx-react";
-import BoardStateKeeper from "../../state/board/BoardStateKeeper";
 import MemberStateKeeper from "../../state/member/MemberStateKeeper";
 import {useNavigate} from "react-router-dom";
 import AppContext from "../../../pages/AppContext";
@@ -24,7 +21,7 @@ interface Props {
     // userId: string,
 }
 
-const SignUpContainer = observer(({
+const SignUpContainer = ({
                              // userId: string,
                          }: Props) => {
 
@@ -122,6 +119,5 @@ const SignUpContainer = observer(({
                 </div>
             </Container>
         );
-    }
-);
-export default SignUpContainer;
+    };
+export default observer(SignUpContainer);

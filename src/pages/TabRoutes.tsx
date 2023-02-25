@@ -18,7 +18,9 @@ const TabRoutes = () => {
     const memberObj = appCtx.memberObj;
 
     useEffect(()=>{
-        init();
+        if(appCtx.isLoggedIn){
+            init();
+        }
     },[appCtx.isLoggedIn]);
 
     const init = () =>{

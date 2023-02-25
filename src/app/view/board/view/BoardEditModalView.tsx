@@ -30,7 +30,7 @@ interface Props {
     handleClickEditComplete: (boardId:string, boardValues:BoardValues, file:File|undefined)=>void;
 }
 
-const BoardEditModalView = observer(((
+const BoardEditModalView = (
         {
             open,
             onClose,
@@ -194,6 +194,5 @@ const BoardEditModalView = observer(((
                 </div>
             </ModalContainer>
         );
-    }
-))
+    };
 export default BoardEditModalView;
