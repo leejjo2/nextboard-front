@@ -26,7 +26,7 @@ class BoardReplyApiStub {
     }
 
     async findBoardList(boardId:string, token: any): Promise<BoardReplyRdo> {
-        return await axios.post(boardReplyRootUrl + '/find-boardReplyList-byBoardId', {boardId:boardId})
+        return await axios.post(boardReplyRootUrl + '/find-boardReplyList-byBoardId', {boardId:boardId}, createTokenHeader(token))
             .then((res) => {
                 return res.data
             })
@@ -34,7 +34,7 @@ class BoardReplyApiStub {
     }
 
     async saveBoard(boardReply: BoardReply, token: any) {
-        await axios.post(boardReplyRootUrl + '/save-boardReply', createTokenHeader(token))
+        await axios.post(boardReplyRootUrl + '/save-boardReply', boardReply,createTokenHeader(token))
             .then((res) => {
                 console.log(res);
             })

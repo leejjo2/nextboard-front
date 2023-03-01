@@ -1,6 +1,6 @@
 import {ModalAction} from "../../shared/ui/modal";
 import {Button} from "@mui/material";
-import React, {MouseEvent, useContext} from "react";
+import React, {MouseEvent, useContext, useState} from "react";
 import ModalContainer from "../../shared/ui/modal/ModalContainer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,7 @@ import CardActions from "@material-ui/core/CardActions";
 import Card from "@material-ui/core/Card";
 import AppContext from "../../../../pages/AppContext";
 import BoardReply from "../../../api/entity/boardReply/BoardReply";
+import {BoardReplyValues} from "../BoardContainer";
 
 
 const theme = createTheme();
@@ -25,6 +26,7 @@ interface Props {
     onClickEditBoard: (boardId: string) => void,
     onClickDeleteBoard: (boardId: string) => void,
     boardReplyList: BoardReply[] | undefined,
+    handleClickSend:any,
 }
 
 const SelectedBoardModalView = (
@@ -35,12 +37,29 @@ const SelectedBoardModalView = (
         onClickEditBoard,
         onClickDeleteBoard,
         boardReplyList,
+        handleClickSend
     }: Props) => {
 
 
 
     const appCtx = useContext(AppContext);
     const memberObj = appCtx.memberObj;
+
+    const [boardReplyValues, setBoardReplyValues] = useState<BoardReplyValues>({
+        replyContent:'',
+    })
+
+    const onChangeBoardReplyInput = (e: any) =>{
+        const {name, value} = e.target;
+        setBoardReplyValues({
+            ...boardReplyValues,
+            [name]:value,
+        })
+    }
+
+    const onClickSend = () => {
+        handleClickSend(boardReplyValues, selectedBoard?.id);
+    }
 
     return (
         <ModalContainer open={open} onClose={onClose} title={'boardList'}>
@@ -100,18 +119,18 @@ const SelectedBoardModalView = (
 
                                     <CardContent>
                                         <TextField id={"replyContent"} size={"small"} label={"Reply"}
-                                                   name={"replyContent"}/>
+                                                   name={"replyContent"} onChange={onChangeBoardReplyInput}/>
                                         <Button size="small" color="primary"
-                                                onClick={() => onClickEditBoard(selectedBoard.id)}>
+                                                onClick={onClickSend}>
                                             send
                                         </Button>
                                     </CardContent>
 
                                     {
                                         boardReplyList?.map((boardReply, index) => (
-                                            <CardContent>
+                                            <CardContent key={index}>
                                                 <Typography>
-                                                    test : {boardReply.content}
+                                                    {boardReply.writerName} : {boardReply.content}
                                                 </Typography>
                                             </CardContent>
                                         ))

@@ -24,6 +24,10 @@ export interface BoardValues {
     content: string,
 }
 
+export interface BoardReplyValues {
+    replyContent: string,
+}
+
 interface Props {
     // userId: string,
 }
@@ -108,13 +112,11 @@ const BoardContainer = () => {
     // Select BoardReply
     const [selectedBoard, setSelectedBoard] = useState<Board | undefined>(undefined);
     const [viewSelectedBoardModal, setViewSelectedBoardModal] = useState<boolean>(false);
-    const [boardReplyList, setBoardReplyList] = useState<BoardReply[] | undefined>(undefined);
     const onClickSelectedBoard = (boardId: string) => {
         boardStateKeeper.findBoard(boardId, token).then((res) => {
             setSelectedBoard(res);
         })
         boardReplyStateKeeper.findBoardReplyList(boardId, token).then((res) => {
-            setBoardReplyList(res.boardReplyList);
         })
         setViewSelectedBoardModal(true);
     }
@@ -133,6 +135,19 @@ const BoardContainer = () => {
             }
         );
     }
+
+    const handleClickSend = (boardReplyValues: BoardReplyValues, boardId:string) => {
+        // const board = Board.new();
+        const boardReply = BoardReply.new();
+        boardReply.content = boardReplyValues.replyContent;
+        boardReply.boardId = boardId;
+        // board.title = boardValues.title;
+        // board.content = boardValues.content;
+        boardReplyStateKeeper.saveBoardReply(boardReply, token).then(() => {
+            boardReplyStateKeeper.findBoardReplyList(boardId, token).then((res) => {
+            })
+        });
+    };
 
 
     return (
@@ -241,7 +256,10 @@ const BoardContainer = () => {
                 viewSelectedBoardModal &&
                 <SelectedBoardModalView open={viewSelectedBoardModal} onClose={onCloseSelectedBoard}
                                         selectedBoard={selectedBoard} onClickEditBoard={onClickEditBoard}
-                                        onClickDeleteBoard={onClickDeleteBoard} boardReplyList={boardReplyRdo?.boardReplyList}/>
+                                        onClickDeleteBoard={onClickDeleteBoard} boardReplyList={boardReplyRdo?.boardReplyList}
+                                        handleClickSend={handleClickSend}
+
+                />
 
             }
         </React.Fragment>
